@@ -1,0 +1,14 @@
+<div class="start-container">
+  <h1>Prêt pour votre interview ?</h1>
+  <p>Entrez le poste pour lequel vous postulez</p>
+
+  <input
+    [(ngModel)]="poste"
+    placeholder="Ex: Développeur Java, Product Manager..."
+    (keyup.enter)="startInterview()"
+  />
+
+  <button (click)="startInterview()" [disabled]="!poste.trim()">
+    Commencer l'interview
+  </button>
+</div>

@@ -1,0 +1,95 @@
+.result-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+
+  h1 {
+    color: #2d3436;
+    margin-bottom: 30px;
+  }
+
+  /* Style du score circulaire */
+  .score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: white;
+    border: 8px solid #00b894; // Vert par défaut
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 40px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+
+    .score-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #2d3436;
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 0.9rem;
+      color: #636e72;
+    }
+  }
+
+  /* Style des cartes de feedback */
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #0984e3; // Bleu pour le général
+
+    h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      color: #2d3436;
+    }
+
+    p {
+      color: #636e72;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    /* Variantes de couleurs pour les cartes */
+    &.success {
+      border-left-color: #00b894;
+      background-color: #f8fff9;
+      h3 { color: #008a6e; }
+    }
+
+    &.warning {
+      border-left-color: #fab1a0;
+      background-color: #fffaf8;
+      h3 { color: #d35400; }
+    }
+  }
+
+  /* Bouton recommencer */
+  button {
+    margin-top: 20px;
+    padding: 15px 40px;
+    background-color: #0984e3;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #07449a;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
+    }
+  }
+}

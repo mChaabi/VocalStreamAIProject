@@ -1,0 +1,73 @@
+/* Conteneur principal centré */
+.start-container {
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 40px;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Titre principal */
+h1 {
+  color: #2d3436;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* Sous-titre / Instruction */
+p {
+  color: #636e72;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+/* Style de l'input */
+input {
+  width: 100%;
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  border: 2px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box; /* Évite que l'input dépasse */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+input:focus {
+  border-color: #0984e3;
+  box-shadow: 0 0 8px rgba(9, 132, 227, 0.2);
+}
+
+/* Style du bouton */
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #0984e3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: #07449a;
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* État désactivé du bouton */
+button:disabled {
+  background-color: #b2bec3;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

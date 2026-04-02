@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: migration-4
+
+  # --- AJOUTER CECI POUR FIXER L'ERREUR DE TAILLE ---
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  # ------------------------------------------------
+
+  ai:
+    openai:
+      base-url: https://api.groq.com/openai
+      api-key: ${GROQ_API_KEY}
+      chat:
+        options:
+          model: llama-3.3-70b-versatile
+          max-tokens: 4096
+          temperature: 1.0
+          top-p: 0.9
+          frequency-penalty: 0.0
+          presence-penalty: 0.0

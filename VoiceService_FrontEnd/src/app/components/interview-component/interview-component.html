@@ -1,0 +1,80 @@
+<div class="interview-container">
+
+  <div class="header">
+    <h2>Interview — {{ state.poste }}</h2>
+    <span class="question-count">Question {{ state.questionNumber }} / 10</span>
+  </div>
+
+  <!-- Barre de statut -->
+  <div class="status-bar" [ngSwitch]="phase$ | async">
+    <div *ngSwitchCase="'LISTENING'" class="status listening">
+      🎧 L'AI parle... écoutez
+    </div>
+    <div *ngSwitchCase="'RECORDING'" class="status recording">
+      🎤 Parlez maintenant...
+    </div>
+    <div *ngSwitchCase="'PROCESSING'" class="status processing">
+      ⏳ Analyse en cours...
+    </div>
+  </div>
+
+  <!-- Bloc timer — visible pendant RECORDING -->
+  <div class="timer-block" *ngIf="(phase$ | async) === 'RECORDING'">
+
+    <p class="timer-label">
+      Durée conseillée : <strong>{{ getDurationLabel(state.questionNumber) }}</strong>
+    </p>
+
+    <!-- Timer display -->
+    <div class="timer-display" [style.color]="timerColor">
+      {{ timerDisplay }}
+    </div>
+
+    <!-- Barre de progression -->
+    <div class="timer-bar-bg">
+      <div
+        class="timer-bar-fill"
+        [style.width.%]="timerPercent"
+        [style.background-color]="timerColor">
+      </div>
+    </div>
+
+    <!-- ✅ Message en attente si timer pas encore démarré -->
+    <p class="timer-waiting" *ngIf="!timerStarted">
+      ⏸️ Prêt ? Cliquez sur <strong>"Commencer à répondre"</strong> pour démarrer le chrono
+    </p>
+
+    <p class="timer-warning" *ngIf="timerStarted && remainingSeconds === 0">
+      ⚠️ Temps écoulé — envoi automatique
+    </p>
+
+  </div>
+
+  <!-- Player audio caché -->
+  <audio #audioPlayer style="display:none"></audio>
+
+  <!-- ✅ Bouton "Commencer à répondre" — visible si RECORDING et timer pas encore démarré -->
+  <button
+    *ngIf="(phase$ | async) === 'RECORDING' && !timerStarted"
+    (click)="beginAnswer()"
+    class="btn-begin">
+    ▶ Commencer à répondre
+  </button>
+
+  <!-- Bouton stop micro — visible si timer démarré -->
+  <button
+    *ngIf="(phase$ | async) === 'RECORDING' && timerStarted"
+    (click)="stopRecording()"
+    class="btn-stop">
+    ⏹ Terminer ma réponse
+  </button>
+
+  <!-- Bouton fin d'interview -->
+  <button
+    *ngIf="(phase$ | async) === 'LISTENING' || (phase$ | async) === 'RECORDING'"
+    (click)="finishInterview()"
+    class="btn-finish">
+    Terminer l'interview
+  </button>
+
+</div>
