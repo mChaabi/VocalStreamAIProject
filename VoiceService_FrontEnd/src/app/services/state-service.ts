@@ -6,9 +6,10 @@ import { EvaluationResponse } from '../models/evaluation-response';
 @Injectable({ providedIn: 'root' })
 export class StateService {
 
-  currentQuestionText = ''; 
+  currentQuestionText = '';
   private phaseSubject = new BehaviorSubject<Phase>('IDLE');
   phase$ = this.phaseSubject.asObservable();
+  surveillanceReport: any;
 
   poste = '';
   questionNumber = 0;
@@ -16,6 +17,10 @@ export class StateService {
 
   setPhase(phase: Phase) {
     this.phaseSubject.next(phase);
+  }
+
+  getPhase(): Phase {
+    return this.phaseSubject.value;
   }
 
   get phase(): Phase {

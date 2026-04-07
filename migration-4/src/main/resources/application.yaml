@@ -17,7 +17,11 @@ spring:
         options:
           model: llama-3.3-70b-versatile
           max-tokens: 4096
-          temperature: 1.0
+          temperature: 0.3
           top-p: 0.9
           frequency-penalty: 0.0
           presence-penalty: 0.0
+    retry:
+      max-attempts: 3
+      initial-interval: 2000
+      multiplier: 2.0

@@ -9,7 +9,9 @@ export class InterviewService {
   private API = 'http://localhost:8080/api/interview';
 
   constructor(private http: HttpClient) {}
-
+sendCheatingReport(surveillanceReport: any): Observable<any> {
+  return this.http.post(`${this.API}/cheating-report`, surveillanceReport);
+}
   // POST /api/interview/start → reçoit bytes MP3
   startInterview(poste: string): Observable<ArrayBuffer> {
     return this.http.post(

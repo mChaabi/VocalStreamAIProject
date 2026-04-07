@@ -1,3 +1,23 @@
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- interview-component.html  — VERSION AVEC CAMÉRA + SURVEILLANCE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--
+  NOUVEAUTÉS PAR RAPPORT À L'ANCIENNE VERSION :
+  1. Bloc caméra   → <video #videoElement> affiche le flux webcam
+  2. Indicateur    → cercle vert/rouge selon si le visage est détecté
+  3. Bloc alerte   → message rouge si le candidat ne regarde pas
+  4. Bloc pause    → message orange si le micro est en pause
+-->
+
+
+<div class="disqualified-overlay" *ngIf="isDisqualified">
+  <div class="message-card">
+    <h1>🚫 Interview Interrompue</h1>
+    <p>Le système a détecté une absence prolongée devant la caméra.
+       Pour des raisons de sécurité, cette session a été clôturée.</p>
+    <button (click)="goToHome()">Retour à l'accueil</button>
+  </div>
+</div>
 <div class="interview-container">
 
   <div class="header">
@@ -5,7 +25,54 @@
     <span class="question-count">Question {{ state.questionNumber }} / 10</span>
   </div>
 
-  <!-- Barre de statut -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- ÉTAPE 1 — Bloc caméra                                       -->
+  <!--   #videoElement → référence utilisée dans le TypeScript      -->
+  <!--   autoplay muted → démarre automatiquement, sans son         -->
+  <!--   playsinline   → important sur mobile                       -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="camera-block">
+
+    <!-- La vidéo de la webcam -->
+    <video
+      #videoElement
+      autoplay
+      muted
+      playsinline
+      class="camera-video">
+    </video>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ÉTAPE 2 — Indicateur de détection du visage             -->
+    <!--   Cercle vert  = visage détecté (candidat regarde)      -->
+    <!--   Cercle rouge = aucun visage détecté                   -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div class="face-indicator" [ngClass]="faceDetected ? 'face-ok' : 'face-missing'">
+      <span class="face-dot"></span>
+      <span class="face-label">
+        {{ faceDetected ? '✅ Visage détecté' : '❌ Regardez la caméra' }}
+      </span>
+    </div>
+
+  </div>
+  <!-- fin bloc caméra -->
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- ÉTAPE 3 — Alerte : regard absent (> 3 secondes)            -->
+  <!--   *ngIf="showWarning" → visible seulement quand nécessaire  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="alert-warning" *ngIf="showWarning">
+    ⚠️ Veuillez regarder la caméra pendant votre réponse !
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- ÉTAPE 3 — Alerte : micro en pause (> 8 secondes)           -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="alert-paused" *ngIf="micPaused">
+    🔇 Micro en pause — Regardez la caméra pour reprendre
+  </div>
+
+  <!-- Barre de statut (inchangée) -->
   <div class="status-bar" [ngSwitch]="phase$ | async">
     <div *ngSwitchCase="'LISTENING'" class="status listening">
       🎧 L'AI parle... écoutez
@@ -18,19 +85,17 @@
     </div>
   </div>
 
-  <!-- Bloc timer — visible pendant RECORDING -->
+  <!-- Bloc timer (inchangé) -->
   <div class="timer-block" *ngIf="(phase$ | async) === 'RECORDING'">
 
     <p class="timer-label">
       Durée conseillée : <strong>{{ getDurationLabel(state.questionNumber) }}</strong>
     </p>
 
-    <!-- Timer display -->
     <div class="timer-display" [style.color]="timerColor">
       {{ timerDisplay }}
     </div>
 
-    <!-- Barre de progression -->
     <div class="timer-bar-bg">
       <div
         class="timer-bar-fill"
@@ -39,7 +104,6 @@
       </div>
     </div>
 
-    <!-- ✅ Message en attente si timer pas encore démarré -->
     <p class="timer-waiting" *ngIf="!timerStarted">
       ⏸️ Prêt ? Cliquez sur <strong>"Commencer à répondre"</strong> pour démarrer le chrono
     </p>
@@ -50,10 +114,10 @@
 
   </div>
 
-  <!-- Player audio caché -->
+  <!-- Player audio caché (inchangé) -->
   <audio #audioPlayer style="display:none"></audio>
 
-  <!-- ✅ Bouton "Commencer à répondre" — visible si RECORDING et timer pas encore démarré -->
+  <!-- Bouton commencer à répondre (inchangé) -->
   <button
     *ngIf="(phase$ | async) === 'RECORDING' && !timerStarted"
     (click)="beginAnswer()"
@@ -61,7 +125,7 @@
     ▶ Commencer à répondre
   </button>
 
-  <!-- Bouton stop micro — visible si timer démarré -->
+  <!-- Bouton stop micro (inchangé) -->
   <button
     *ngIf="(phase$ | async) === 'RECORDING' && timerStarted"
     (click)="stopRecording()"
@@ -69,7 +133,7 @@
     ⏹ Terminer ma réponse
   </button>
 
-  <!-- Bouton fin d'interview -->
+  <!-- Bouton fin d'interview (inchangé) -->
   <button
     *ngIf="(phase$ | async) === 'LISTENING' || (phase$ | async) === 'RECORDING'"
     (click)="finishInterview()"

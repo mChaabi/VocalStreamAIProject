@@ -1,33 +1,85 @@
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- result-component.html  — VERSION AVEC RAPPORT DE SURVEILLANCE  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--
+  NOUVEAUTÉ :
+  - Bloc "Rapport de surveillance caméra" en bas de page (étape 4)
+  - Score de présence calculé depuis presenceScore (result-component.ts)
+-->
+
 @if(evaluation !== null) {
-  <div class="result-container" >
+  <div class="result-container">
 
-  <h1>Résultat de votre interview</h1>
+    <h1>Résultat de votre interview</h1>
 
-  <!-- Score visuel -->
-  <div class="score-circle">
-    <span class="score-number">{{ evaluation.score }}</span>
-    <span class="score-label">/100</span>
+    <!-- Score interview AI (inchangé) -->
+    <div class="score-circle">
+      <span class="score-number">{{ evaluation.score }}</span>
+      <span class="score-label">/100</span>
+    </div>
+
+    <!-- Feedback général (inchangé) -->
+    <div class="card">
+      <h3>Feedback général</h3>
+      <p>{{ evaluation.feedback }}</p>
+    </div>
+
+    <!-- Points forts (inchangé) -->
+    <div class="card success">
+      <h3>Points forts</h3>
+      <p>{{ evaluation.pointsForts }}</p>
+    </div>
+
+    <!-- Points à améliorer (inchangé) -->
+    <div class="card warning">
+      <h3>Points à améliorer</h3>
+      <p>{{ evaluation.pointsAmelioration }}</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ÉTAPE 4 — Rapport de surveillance caméra                   -->
+    <!--   Visible seulement si surveillanceReport existe           -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    @if(surveillanceReport !== null) {
+      <div class="card surveillance">
+        <h3>📷 Rapport de surveillance caméra</h3>
+
+        <!-- Score de présence calculé dans le TypeScript -->
+        <div class="presence-score">
+          <span class="presence-number">{{ presenceScore }}</span>
+          <span class="presence-label">/100 — Score de présence</span>
+        </div>
+
+        <!-- Détails du rapport -->
+        <ul class="surveillance-details">
+          <li>
+            👁️ Nombre de fois regardé ailleurs :
+            <strong>{{ surveillanceReport.totalLookAways }}</strong>
+          </li>
+          <li>
+            ⏱️ Durée totale hors caméra :
+            <strong>{{ surveillanceReport.totalLookAwayDuration }} secondes</strong>
+          </li>
+          <li>
+            🔇 Micro mis en pause :
+            <strong>{{ surveillanceReport.micPausedCount }} fois</strong>
+          </li>
+        </ul>
+
+        <!-- Message selon le score de présence -->
+        @if(presenceScore >= 80) {
+          <p class="presence-ok">✅ Excellente présence devant la caméra !</p>
+        } @else if(presenceScore >= 50) {
+          <p class="presence-medium">⚠️ Présence correcte, mais quelques distractions notées.</p>
+        } @else {
+          <p class="presence-bad">❌ Présence insuffisante — restez concentré sur la caméra.</p>
+        }
+
+      </div>
+    }
+    <!-- fin bloc surveillance -->
+
+    <button (click)="restart()">Recommencer une interview</button>
+
   </div>
-
-  <!-- Feedback général -->
-  <div class="card">
-    <h3>Feedback général</h3>
-    <p>{{ evaluation.feedback }}</p>
-  </div>
-
-  <!-- Points forts -->
-  <div class="card success">
-    <h3>Points forts</h3>
-    <p>{{  evaluation.pointsForts }}</p>
-  </div>
-
-  <!-- Points à améliorer -->
-  <div class="card warning">
-    <h3>Points à améliorer</h3>
-    <p>{{evaluation.pointsAmelioration }}</p>
-  </div>
-
-  <button (click)="restart()">Recommencer une interview</button>
-</div>
 }
-
